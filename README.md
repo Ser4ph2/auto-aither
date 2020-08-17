@@ -7,6 +7,22 @@ auto-aither is a python3 script which provides a convenient and easy to use inte
 
 It can then upload all this directly to aither.cc. You can also use the script in a modular fashion if you just want to do one certain thing.
 
+## Installation
+> git clone https://github.com/Ser4ph2/auto-aither.git
+
+> cd auto-aither
+
+> pip3 install -r requirements.txt
+
+> chmod +x main.py
+
+> ./main.py
+
+Obviously you will need Python3 and pip3 installed. To install these:
+> apt install python3
+
+> apt install python3-pip
+
 ## FAQ
 - What is my PID and where do I find it?
 
