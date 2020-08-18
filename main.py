@@ -99,7 +99,7 @@ def takeScreenshots(path):
     os.system("mkdir screenshots")
     while True:
         for each in timeStamps:
-            os.system("ffmpeg -ss {} -i {} -q:v 2 -vframes 1 screenshots/{}.jpg".format(each, filePath, str(timeStamps.index(each)+1)))
+            os.system("ffmpeg -ss {} -i {} -q:v 2 -vframes 1 screenshots/{}.png".format(each, filePath, str(timeStamps.index(each)+1)))
         print("\n[?] Are these screenshots okay? (./screenshots) [Y/n]: ", end="")
         tmp = input()
         if tmp.upper() != "N" and tmp.upper != "NO":
