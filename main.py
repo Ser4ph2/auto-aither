@@ -173,7 +173,8 @@ def getInfo():
     print("[2] Remux")
     print("[3] WEB-DL")
     print("[4] WEBRip")
-    print("[5] Other")
+    print("[5] HDTV")
+    print("[6] Other")
     while True:
         print("[?] Choose type: ", end="")
         tmp = input()
@@ -186,6 +187,8 @@ def getInfo():
                 torrentType = 42
             elif tmp == "4":
                 torrentType = 43
+            elif tmp == "5":
+                torrentType = 44
             else:
                 torrentType = 7
             break
@@ -335,9 +338,9 @@ def createTorrentUpload():
 
     status, response = upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, resID)
     if status == 200:
-        print("Uploaded successfully!")
+        print("\n[*] Uploaded successfully!")
     else:
-        print("Error " + str(status))
+        print("\n[!] Error " + str(status))
     
     torrentDownloadURL = response["data"]
     print("[*] Downloading new .torrent file...")
