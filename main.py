@@ -14,22 +14,22 @@ def dispBanner():
     print("AUTO-AITHER v0.1")
     print("*"*16)
 
-def newAnnounceURL():
-    print("\n\n[?] Enter PID (see github FAQ if unsure): ", end="")
-    pid = input()
-    url = "https://aither.cc/announce/" + pid
-    with open("announce.txt", "w") as f:
-        f.write(url)
-    return url
+# def newAnnounceURL():
+#     print("\n\n[?] Enter PID (see github FAQ if unsure): ", end="")
+#     pid = input()
+#     url = "https://aither.cc/announce/" + pid
+#     with open("announce.txt", "w") as f:
+#         f.write(url)
+#     return url
 
-def loadAnnounceURL():
-    try:
-        with open("announce.txt", "r") as f:
-            url = f.read()
-        return url
-    except Exception as e:
-        print("Exception: " + str(e))
-        return None
+# def loadAnnounceURL():
+#     try:
+#         with open("announce.txt", "r") as f:
+#             url = f.read()
+#         return url
+#     except Exception as e:
+#         print("Exception: " + str(e))
+#         return None
 
 def makeTorrent(path):
     # determine which piece size to use for torrent: 0.5mb if file < 1gb, 4mb if file < 50gb and 16mb if file > 50gb
@@ -41,22 +41,24 @@ def makeTorrent(path):
     else:
         pieceSize = "25" 
 
-    print("\n\n[1] Enter announce URL and save for future use")
-    print("[2] Use saved announce URL")
-    print("[3] Use placeholder announce URL (you will need to download the .torrent file after to use in your torrent client)")
-    while True:
-        choice = input("> ")
-        if choice in ["1", "2", "3"]:
-            break
-        else:
-            print("[!] Invalid option\n")
+    # print("\n\n[1] Enter announce URL and save for future use")
+    # print("[2] Use saved announce URL")
+    # print("[3] Use placeholder announce URL (you will need to download the .torrent file after to use in your torrent client)")
+    # while True:
+    #     choice = input("> ")
+    #     if choice in ["1", "2", "3"]:
+    #         break
+    #     else:
+    #         print("[!] Invalid option\n")
 
-    if choice == "1":
-        announceURL = newAnnounceURL()
-    elif choice == "2":
-        announceURL = loadAnnounceURL()
-    else:
-        announceURL = "placeholder"
+    # if choice == "1":
+    #     announceURL = newAnnounceURL()
+    # elif choice == "2":
+    #     announceURL = loadAnnounceURL()
+    # else:
+    #     announceURL = "placeholder"
+
+    announceURL= "placeholder"
 
     print("\n")
     print("-"*50)
@@ -134,13 +136,40 @@ def getInfo():
     print("[?] Choose category: ",end="")
     category = int(input())
 
-    print("[?] Enter resolution: ", end="")
-    res = input()
+    print("\n**RESOLUTION**")
+    print("[1] 2160p")
+    print("[2] 1080p")
+    print("[3] 720p")
+    print("[4] 480p")
+    print("[5] Other/Mixed")
+    while True:
+        print("[?] Choose resolution: ", end="")
+        tmp = input()
+        if tmp in ["1", "2", "3", "4", "5"]:
+            if tmp == "1":
+                resID = 2
+                res = "2160p"
+            elif tmp == "2":
+                resID = 3
+                res = "1080p"
+            elif tmp == "3":
+                resID = 5
+                res = "720p"
+            elif tmp == "4":
+                resID = 8
+                res = "480p"
+            else:
+                resID = 10
+                res = input("[?] What resolution is the media? (e.g 720p/Mixed): ")
+            break
+        else:
+            print("[!] Invalid option.")
 
     print("[?] Enter source: ", end="")
     source = input()
 
-    print("\n[1] Encode")
+    print("\n**TYPE**")
+    print("[1] Encode")
     print("[2] Remux")
     print("[3] WEB-DL")
     print("[4] WEBRip")
@@ -150,15 +179,15 @@ def getInfo():
         tmp = input()
         if tmp in ["1", "2", "3", "4", "5"]:
             if tmp == "1":
-                torrentType = "Encode"
+                torrentType = 38
             elif tmp == "2":
-                torrentType = "Remux"
+                torrentType = 37
             elif tmp == "3":
-                torrentType = "Web-DL"
+                torrentType = 42
             elif tmp == "4":
-                torrentType = "WEBRip"
+                torrentType = 43
             else:
-                torrentType = "Other"
+                torrentType = 7
             break
         else:
             print("[!] Invalid option.")
@@ -214,7 +243,7 @@ def getInfo():
         metadata = [title, res, bits10, source, audio, video]
     else:
         metadata = [title, res, source, audio, video]
-    return metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType
+    return metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID
 
 def getDescription():
     description = ""
@@ -224,7 +253,7 @@ def getDescription():
             images.append(line)
     
     for each in images:
-        description += "[img]{}[/img]\n".format(each)
+        description += "[img=350x350]{}[/img]\n".format(each)
     return description
 
 def newApiKey():
@@ -243,7 +272,7 @@ def loadApiKey():
         print("Exception: " + str(e))
         return None
 
-def upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, metadata):
+def upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, resID):
     print("\n\n[1] Enter API key and save for future use")
     print("[2] Use saved API key")
     print("[3] Enter API key and don't save")
@@ -262,14 +291,13 @@ def upload(torrentPath, finalTitle, description, mediainfo, category, torrentTyp
         apiKey = input("Enter API key: ")
 
     url = "https://aither.cc/api/torrents/upload?api_token={}".format(apiKey)
-    print(url)
     files = {"torrent": open(torrentPath,"rb")}
     values = {"name": finalTitle,
             "description": description,
             "mediainfo": mediainfo,
             "category_id": category,
-            "type": torrentType,
-            "resolution": metadata[1],
+            "type_id": torrentType,
+            "resolution_id": resID,
             "tmdb": tmdb,
             "imdb": imdb,
             "tvdb": tvdb,
@@ -281,7 +309,7 @@ def upload(torrentPath, finalTitle, description, mediainfo, category, torrentTyp
             "internal": internal,
             "user_id": 3}
     r = requests.post(url, files=files, data=values)
-    return r.status_code
+    return r.status_code, r.json()
 
 def createTorrentUpload():
     print("\n[?] Enter path of file/folder: ", end="")
@@ -294,7 +322,7 @@ def createTorrentUpload():
     filePath = takeScreenshots(path)
     uploadScreenshots()
     mediainfo = getMediainfo(filePath)
-    metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType = getInfo()
+    metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
     imdb = 0
     tvdb = 0
     mal = 0
@@ -305,11 +333,23 @@ def createTorrentUpload():
     finalTitle += "-{}".format(crew)
     description = getDescription()
 
-    result = upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, metadata)
-    if result == 200:
-        print("Upload successfully!")
+    status, response = upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, resID)
+    if status == 200:
+        print("Uploaded successfully!")
     else:
-        print("Error " + str(result))
+        print("Error " + str(status))
+    
+    torrentDownloadURL = response["data"]
+    print("[*] Downloading new .torrent file...")
+    os.system("wget -O '{}' {}".format(finalTitle+".torrent", torrentDownloadURL))
+    print("\n[*] Done! Add this file to your client and you are good to go!")
+    clean = input("[?] Would you like files and folders generated during upload to be deleted? [Y/n]: ")
+    
+    try:
+        if clean.upper() != "NO" and clean.upper() != "N":
+            os.system("rm -r ./screenshots; rm ./mediainfo.txt; rm {}".format(torrentPath))
+    except:
+        pass
     main()
 
 
@@ -325,7 +365,37 @@ def createTorrent():
         main()
 
 def uploadTorrent():
-    pass
+    torrentPath = input("[?] Enter path of .torrent file: ")
+    metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
+    description = input("[?] Enter torrent description: ")
+    mediainfo = input("[?] Paste mediainfo dump: ")
+    imdb = 0
+    tvdb = 0
+    mal = 0
+    igdb = 0
+
+
+    finalTitle = " ".join(metadata)
+    finalTitle += "-{}".format(crew)
+    status, response = upload(torrentPath, finalTitle, description, mediainfo, category, torrentType, tmdb, imdb, tvdb, mal, igdb, anon, stream, sd, internal, resID)
+    
+    if status == 200:
+        print("Uploaded successfully!")
+    else:
+        print("Error " + str(status))
+    
+    torrentDownloadURL = response["data"]
+    print("[*] Downloading new .torrent file...")
+    os.system("wget -O '{}' {}".format(finalTitle+".torrent", torrentDownloadURL))
+    print("\n[*] Done! Add this file to your client and you are good to go!")
+    clean = input("[?] Would you like files and folders generated during upload to be deleted? [Y/n]: ")
+    
+    try:
+        if clean.upper() != "NO" and clean.upper() != "N":
+            os.system("rm -r ./screenshots; rm ./mediainfo.txt; rm {}".format(torrentPath))
+    except:
+        pass
+    main()
 
 def main():
     dispBanner()
