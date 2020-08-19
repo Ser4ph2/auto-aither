@@ -321,6 +321,10 @@ def createTorrentUpload():
         print("[!] File does not exist.\n\n")
         main()
 
+    # for some reason including the / at the end of a path breaks stuff, just easier to remove it for now
+    if path[-1] == "/":
+        path = path[:-1]
+
     torrentPath = makeTorrent(path)
     filePath = takeScreenshots(path)
     uploadScreenshots()
