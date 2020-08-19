@@ -23,6 +23,11 @@ Obviously you will need Python3 and pip3 installed. To install these:
 
 > apt install python3-pip
 
+You also need ffmpeg and mktorrent installed.
+> apt install mktorrent
+
+> apt install ffmpeg
+
 ## FAQ
 - What is my PID and where do I find it?
 
