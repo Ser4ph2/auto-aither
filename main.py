@@ -174,11 +174,12 @@ def getInfo():
     print("[3] WEB-DL")
     print("[4] WEBRip")
     print("[5] HDTV")
-    print("[6] Other")
+    print("[6] Anime")
+    print("[7] Other")
     while True:
         print("[?] Choose type: ", end="")
         tmp = input()
-        if tmp in ["1", "2", "3", "4", "5"]:
+        if tmp in ["1", "2", "3", "4", "5", "6"]:
             if tmp == "1":
                 torrentType = 38
             elif tmp == "2":
@@ -189,6 +190,8 @@ def getInfo():
                 torrentType = 43
             elif tmp == "5":
                 torrentType = 44
+            elif tmp == "6":
+                torrentType = 40
             else:
                 torrentType = 7
             break
@@ -201,8 +204,23 @@ def getInfo():
     print("[?] Enter audio codec: ", end="")
     audio = input()
 
-    print("[?] Enter TMDB: ", end="")
+    print("[?] Enter TMDB (required): ", end="")
     tmdb = input()
+
+    print("[?] Enter IMDB (not required): ", end="")
+    imdb = input()
+    if imdb.strip() == "":
+        imdb = 0
+
+    print("[?] Enter TVDB (not required): ", end="")
+    tvdb = input()
+    if tvdb.strip() == "":
+        tvdb = 0
+
+    print("[?] Enter MAL (required for anime): ", end="")
+    mal = input()
+    if mal.strip() == "":
+        mal = 0
 
     print("[?] 10bit colour depth? [y/N]: ", end="")
     tmp = input()
@@ -246,7 +264,7 @@ def getInfo():
         metadata = [title, res, bits10, source, audio, video]
     else:
         metadata = [title, res, source, audio, video]
-    return metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID
+    return metadata, category, tmdb, imdb, tvdb, mal, anon, stream, sd, internal, crew, torrentType, resID
 
 def getDescription():
     description = ""
@@ -329,10 +347,8 @@ def createTorrentUpload():
     filePath = takeScreenshots(path)
     uploadScreenshots()
     mediainfo = getMediainfo(filePath)
-    metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
-    imdb = 0
-    tvdb = 0
-    mal = 0
+    metadata, category, tmdb, imdb, tvdb, mal, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
+
     igdb = 0
 
 
@@ -373,12 +389,9 @@ def createTorrent():
 
 def uploadTorrent():
     torrentPath = input("[?] Enter path of .torrent file: ")
-    metadata, category, tmdb, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
+    metadata, category, tmdb, imdb, tvdb, mal, anon, stream, sd, internal, crew, torrentType, resID = getInfo()
     description = input("[?] Enter torrent description: ")
     mediainfo = input("[?] Paste mediainfo dump: ")
-    imdb = 0
-    tvdb = 0
-    mal = 0
     igdb = 0
 
 
