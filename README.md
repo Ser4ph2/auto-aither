@@ -8,25 +8,34 @@ auto-aither is a python3 script which provides a convenient and easy to use inte
 It can then upload all this directly to aither.cc. You can also use the script in a modular fashion if you just want to do one certain thing.
 
 ## Installation
-> git clone https://github.com/Ser4ph2/auto-aither.git
 
-> cd auto-aither
+```bash
+git clone https://github.com/Ser4ph2/auto-aither.git
 
-> pip3 install -r requirements.txt
+cd auto-aither
 
-> chmod +x main.py
+pip3 install -r requirements.txt
 
-> ./main.py
+chmod +x main.py
+
+./main.py
+```
 
 Obviously you will need Python3 and pip3 installed. To install these:
-> apt install python3
 
-> apt install python3-pip
+```bash
+apt install python3
+
+apt install python3-pip
+```
 
 You also need ffmpeg and mktorrent installed.
-> apt install mktorrent
 
-> apt install ffmpeg
+```bash
+apt install mktorrent
+
+apt install ffmpeg
+```
 
 ## FAQ
 - What is my PID and where do I find it?
